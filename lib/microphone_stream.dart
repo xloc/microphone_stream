@@ -15,11 +15,6 @@ class MicrophoneStream {
   late Stream<Float32List> stream;
 
   MicrophoneStream() {
-    final trunkStreamController = StreamController<Float32List>();
-    _channel.receiveBroadcastStream().cast<Uint8List>().listen((trunk) {
-      final list = trunk.buffer.asFloat32List();
-      trunkStreamController.add(list);
-    });
-    stream = trunkStreamController.stream;
+    stream = _channel.receiveBroadcastStream().cast<Float32List>();
   }
 }

@@ -1,10 +1,7 @@
-import 'dart:math';
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'dart:async';
+import 'package:collection/collection.dart';
 
-import 'package:flutter/services.dart';
 import 'package:microphone_stream/microphone_stream.dart';
 
 void main() {
@@ -31,7 +28,7 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
-          title: const Text('Plugin example app'),
+          title: const Text('Microphone Loudness Bars'),
         ),
         body: StreamBuilder(
           stream: micStream.stream,
@@ -41,7 +38,7 @@ class _MyAppState extends State<MyApp> {
             }
 
             final data = snapshot.data!;
-            return LoudnessBar(data: data);
+            return LoudnessScreen(data: data);
           },
         ),
       ),
@@ -49,8 +46,8 @@ class _MyAppState extends State<MyApp> {
   }
 }
 
-class LoudnessBar extends StatelessWidget {
-  const LoudnessBar({
+class LoudnessScreen extends StatelessWidget {
+  const LoudnessScreen({
     Key? key,
     required this.data,
   }) : super(key: key);
@@ -59,20 +56,45 @@ class LoudnessBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // final double loudness = data.reduce(
-    //   (value, element) {
-    //     final abs = value.abs();
-    //     return max(abs, value);
-    //   },
-    // );
-    final loudness = data[0];
+    final loudness = data.map((n) => n.abs()).average;
+    final loudnessMax = data.max;
 
-    return Center(
-      child: Column(
-        children: [
-          Text("${loudness.toStringAsFixed(4)}"),
-          Text(data.length.toString()),
-        ],
+    return Column(
+      children: [
+        LoudnessBar(
+          loudness: loudnessMax,
+          color: Colors.amber,
+          text: "max",
+        ),
+        LoudnessBar(loudness: loudness, color: Colors.green, text: "avg")
+      ],
+    );
+  }
+}
+
+class LoudnessBar extends StatelessWidget {
+  const LoudnessBar({
+    Key? key,
+    required this.loudness,
+    required this.color,
+    required this.text,
+  }) : super(key: key);
+
+  final double loudness;
+  final Color color;
+  final String text;
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: double.infinity,
+      height: 100,
+      child: FractionallySizedBox(
+        widthFactor: loudness + 0.1,
+        child: Container(
+          color: color,
+          child: Center(child: Text(text)),
+        ),
       ),
     );
   }
