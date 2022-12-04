@@ -1,6 +1,6 @@
 # microphone_stream
 
-A new Flutter plugin for acquiring audio stream on macOS. The implementation is based on AVAudioEngine. 
+A Flutter plugin for acquiring audio stream on macOS. The implementation is based on AVAudioEngine. 
 
 # Example
 
