@@ -1,15 +1,33 @@
 # microphone_stream
 
-A new Flutter plugin project.
+A new Flutter plugin for acquiring audio stream on macOS. The implementation is based on AVAudioEngine. 
 
-## Getting Started
+# Example
 
-This project is a starting point for a Flutter
-[plug-in package](https://flutter.dev/developing-packages/),
-a specialized package that includes platform-specific implementation code for
-Android and/or iOS.
+```dart
+class _MyAppState extends State<MyApp> {
+  final micStream = MicrophoneStream();
 
-For help getting started with Flutter development, view the
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: Scaffold(
+        body: StreamBuilder(
+          stream: micStream.stream,
+          builder: (context, snapshot) {
+            if (snapshot.data == null) {
+              return Container();
+            } else {
+              final data = snapshot.data!;
+              return Text("${data.max}");
+            }
+          },
+        ),
+      ),
+    );
+  }
+}
+```
+
+see `example/lib/main.dart` for details
 

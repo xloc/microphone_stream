@@ -4,14 +4,14 @@ import 'dart:typed_data';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 
-import 'microphone_stream_platform_interface.dart';
-
-class AudioChannelMicrophoneStream extends MicrophoneStreamPlatform {
+class AudioChannelMicrophoneStream {
   final channel = const EventChannel('xloc.cc/microphone_stream');
 }
 
 class MicrophoneStream {
   final _channel = AudioChannelMicrophoneStream().channel;
+
+  /// The stream of audio. The samples are grouped into chunks
   late Stream<Float32List> stream;
 
   MicrophoneStream() {
